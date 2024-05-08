@@ -26,8 +26,6 @@ router.post('/getOpenidAndToken', async (req, res) => {
     try {
         const code = req.body.code; // 获取微信回调返回的授权码
 
-        console.log(code)
-        
         // 使用code换取session_key和openid
         const data = await getOpenidAndToken(code);
         
@@ -35,7 +33,10 @@ router.post('/getOpenidAndToken', async (req, res) => {
             throw new Error('Failed to exchange code for session_key and openid');
         }
     
-        res.json(data);
+        res.json({
+            openid: data.openid,
+            unionid: data.unionid || ''
+        });
     } catch (error) {
       res.status(500).send(error.message || error);
     }
